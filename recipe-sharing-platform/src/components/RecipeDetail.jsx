@@ -1,52 +1,61 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import recipeData from "../data.json";
+import data from "../data.json";
 
-function RecipeDetail() {
+const RecipeDetail = () => {
   const { id } = useParams();
-  const [recipe, setRecipe] = useState(null);
   const navigate = useNavigate();
+  const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
-    // Find the recipe by ID
-    const recipeDetails = recipeData.find(
-      (recipe) => recipe.id === parseInt(id)
-    );
-    if (recipeDetails) {
-      setRecipe(recipeDetails);
+    // Find the recipe by ID from the mock data
+    const selectedRecipe = data.find((item) => item.id === parseInt(id, 10));
+    if (selectedRecipe) {
+      setRecipe(selectedRecipe);
     } else {
-      navigate("/"); // Redirect if recipe not found
+      // Redirect to HomePage if recipe is not found
+      navigate("/");
     }
   }, [id, navigate]);
 
-  if (!recipe) {
-    return <div className="text-center mt-4">Loading...</div>;
-  }
+  if (!recipe) return <div>Loading...</div>;
 
   return (
-    <div className="p-6">
-      <h1 className="text-4xl font-bold mb-6">{recipe.title}</h1>
+    <div className="p-8 bg-white max-w-4xl mx-auto rounded-lg shadow-lg">
       <img
         src={recipe.image}
         alt={recipe.title}
-        className="w-full h-64 object-cover rounded-lg shadow-md mb-6"
+        className="w-full h-64 object-cover rounded-md mb-4"
       />
-      <div className="mb-6 p-4 shadow-lg rounded-lg bg-white">
-        <h2 className="text-2xl font-semibold mb-2">Ingredients</h2>
-        <ul className="list-disc list-inside">
-          {recipe.ingredients.map((ingredient, index) => (
-            <li key={index} className="text-gray-700">
-              {ingredient}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <h2 className="p-4 shadow-lg rounded-lg bg-white">Instructions</h2>
-        <p className="text-gray-700">{recipe.instructions}</p>
-      </div>
+      <h1 className="text-3xl font-bold mb-4">{recipe.title}</h1>
+      <p className="text-gray-600 mb-4">{recipe.summary}</p>
+
+      <h2 className="text-2xl font-semibold mt-8 mb-2">Ingredients</h2>
+      <ul className="list-disc list-inside mb-4">
+        {recipe.ingredients.map((ingredient, index) => (
+          <li key={index} className="text-gray-700">
+            {ingredient}
+          </li>
+        ))}
+      </ul>
+
+      <h2 className="text-2xl font-semibold mt-8 mb-2">Instructions</h2>
+      <ol className="list-decimal list-inside space-y-2">
+        {recipe.instructions.map((step, index) => (
+          <li key={index} className="text-gray-700">
+            {step}
+          </li>
+        ))}
+      </ol>
+
+      <button
+        onClick={() => navigate("/")}
+        className="mt-6 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+      >
+        Back to Home
+      </button>
     </div>
   );
-}
+};
 
 export default RecipeDetail;
