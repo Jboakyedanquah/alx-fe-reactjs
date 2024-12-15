@@ -1,17 +1,16 @@
-import React from 'react';
-import Search from './components/Search';
-import './index.css'
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+import Search from "./components/Search";
+function App() {
+  const [count, setCount] = useState(0);
 
-const App = () => {
-    return (
-        <div>
-            <header>
-            </header>
-            <main>
-                <Search />
-            </main>
-        </div>
-    );
-};
+  return (
+    <>
+      <Search />
+    </>
+  );
+}
 
 export default App;
